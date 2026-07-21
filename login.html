@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="website icon" type="image/png" href="favicon.png">
+</head>
+<body>
+    <div class="container" target="_blank">
+        <div class="card" style="max-width:420px;margin:80px auto;">
+            <h2>Admin Login</h2>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="user">User</label>
+                    <input type="text" id="user" placeholder="Admin" required>
+                </div>
+                <div class="form-group">
+                    <label for="pass">Password</label>
+                    <input type="password" id="pass" placeholder="Password" required>
+                </div>
+                <button type="submit" id="loginButton" class="btn btn-primary">Login</button>
+                <div id="msg" style="color:red;margin-top:8px"></div>
+                <div id="progressText" style="color:#333; margin-top:8px; min-height:20px;"></div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const loginForm = document.getElementById('loginForm');
+        const msg = document.getElementById('msg');
+        const progressText = document.getElementById('progressText');
+        const loginButton = document.getElementById('loginButton');
+
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const user = document.getElementById('user').value.trim();
+            const pass = document.getElementById('pass').value;
+            msg.textContent = '';
+            loginButton.disabled = true;
+
+            let progress = 0;
+            progressText.textContent = 'Logging in 0%';
+            const interval = setInterval(() => {
+                progress += 10;
+                progressText.textContent = `Logging in ${progress}%`;
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    if (user === 'Admin' && pass === 'admin') {
+                        sessionStorage.setItem('isAdmin', 'true');
+                        window.location.href = 'index.html';
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 500);
+                    } else {
+                        msg.textContent = 'Invalid credentials';
+                        progressText.textContent = '';
+                        loginButton.disabled = false;
+                    }
+                }
+            }, 80);
+        });
+    </script>
+</body>
+</html>
